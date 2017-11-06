@@ -22,12 +22,18 @@ export class FavoritesPage{
   onViewQuote(quote: Quote){
     const modal = this.modalCtrl.create(QuotePage, quote);
     modal.present();
-    modal.onDidDismiss((remove: boolean) => {
-      this.quotesService.removeQuoteFromFavorite(quote);
-      let idx = this.quotes.indexOf(quote);
 
-      this.quotes.splice(idx, 1);
+    //To return some Data use this, if not, use "modal.didLeave.subscribe()"
+    modal.onDidDismiss((remove: boolean) => {
+      if(remove){
+        this.onRemoveFromFavorite(quote);
+      }      
     });
+  }
+
+  onRemoveFromFavorite(quote: Quote){
+    this.quotesService.removeQuoteFromFavorite(quote);
+    this.quotes = this.quotesService.getFavoriteQuotes();
   }
 
 }
